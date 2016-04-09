@@ -21,6 +21,11 @@ MYSQL_USER="backuper"
 MYSQL_PASSWD="backpasswd"
 AVUSER=$(mysqladmin -u${MYSQL_USER} -p${MYSQL_PASSWD} -h${MYSQL_HOST} ping)
 
+# change those three variables
+USER='user'
+BACK_ADDRESS='backup_ip_address'
+STORE_ADDRESS='store_ip_assress'
+
 # ensure dir is exist
 [ -d $BACKUP_DIR ] || mkdir -pv $BACKUP_DIR
 [ -d $FULL_BACKUP_DIR ] || mkdir -pv $FULL_BACKUP_DIR
@@ -46,12 +51,12 @@ fi
 
 transfer ()
 {
-    scp -p -q -r $1 zonzpoo@115.28.191.78:/data/mysql_backup_data/121.41.75.133/$2/
+    scp -p -q -r $1 $USER@$STORE_ADDRESS:/data/mysql_backup_data/$BACK_ADDRESS/$2/
     if [ $? -eq 0 ];then
-        echo "Tar file had transfered to 121.41.75.133...."  >> $logfiledate
+        echo "Tar file had transfered to $BACK_ADDRESS...."  >> $logfiledate
         rm -f $1 && echo "Delete $1 file success....." >> $logfiledate
     else
-        echo "copy to 121.41.75.133 failure...."  >> $logfiledate
+        echo "copy to $BACK_ADDRESS failure...."  >> $logfiledate
     fi
 }
 
